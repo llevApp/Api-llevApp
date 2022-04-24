@@ -1,8 +1,5 @@
 module llevapp
 
-$ git config --global user.name "NicolasGarciaSantelices"
-git config --global user.email n.garciasantelices@gmail.com
-go 1.18
 
 require (
 	github.com/denisenkom/go-mssqldb v0.12.0
