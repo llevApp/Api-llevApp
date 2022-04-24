@@ -1,6 +1,8 @@
 module llevapp
 
 
+go 1.18
+
 require (
 	github.com/denisenkom/go-mssqldb v0.12.0
 	github.com/gin-gonic/gin v1.7.7
