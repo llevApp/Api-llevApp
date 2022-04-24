@@ -1,0 +1,19 @@
+{
+    //VS Code environment variables file to use -only- when local debugging with VS Code
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "go",
+            "export": "GIN_MODE=release",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceRoot}/src",
+            "env": {
+                "PORT": "10000",
+                "SQL_CONNECTION_STRING_EV":"host=34.105.10.81 port=5432 user=copevuser password=/vfM-AQn@$!R(6AD dbname=copiloto_ev sslmode=disable",
+            },
+            "args": []
+        }
+    ]
+}
