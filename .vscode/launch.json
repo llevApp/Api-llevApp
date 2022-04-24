@@ -11,7 +11,7 @@
             "program": "${workspaceRoot}/src",
             "env": {
                 "PORT": "10000",
-                "SQL_CONNECTION_STRING_EV":"host=34.105.10.81 port=5432 user=copevuser password=/vfM-AQn@$!R(6AD dbname=copiloto_ev sslmode=disable",
+                "SQL_CONNECTION_STRING_EV":"",
             },
             "args": []
         }
