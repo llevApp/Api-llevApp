@@ -31,7 +31,7 @@ func NewUser(c *gin.Context) {
 	)
 
 	/* name := c.PostForm("name")
-	mail := c.PostForm("mail") */
+	email := c.PostForm("email") */
 
 	if err := c.ShouldBindJSON(&user); err == nil {
 		c.JSON(200, user)

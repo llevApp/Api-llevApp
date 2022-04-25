@@ -18,9 +18,9 @@ func main() {
 	logger.Info("Initializing api...")
 
 	allServices := []services.Service{
-		/* services.NewSQLServerService(
+		services.NewPostgreSQLService(
 			os.Getenv("SQL_CONNECTION_STRING"),
-		), */
+		),
 		services.NewAPIService(os.Getenv("PORT")),
 	}
 	for _, service := range allServices {
