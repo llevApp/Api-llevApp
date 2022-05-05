@@ -11,7 +11,8 @@
             "program": "${workspaceRoot}/src",
             "env": {
                 "PORT": "10000",
-                "SQL_CONNECTION_STRING":"host=ec2-3-209-124-113.compute-1.amazonaws.com port=5432 user=csgktsvbbxvjpp password=17636e7389ad55a02b1ac8fe3a980299beac440528bc12a04fea51eae18efed7 dbname=d5d9jsqa0i9dt9 sslmode=disable"
+                "SQL_CONNECTION_STRING":"host=ec2-3-209-124-113.compute-1.amazonaws.com port=5432 user=csgktsvbbxvjpp password=17636e7389ad55a02b1ac8fe3a980299beac440528bc12a04fea51eae18efed7 dbname=d5d9jsqa0i9dt9",
+                //"SQL_CONNECTION_STRING":"host=ec2-52-72-252-211.compute-1.amazonaws.com port=5432 user=spdkbddxynexbe password=2244405d1de4d94e500c668868571ea324040709be8beb1ae2fc1769e311a91d dbname=d4qsaefpehhcjp sslmode=disable",
             },
             "args": []
         }

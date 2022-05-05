@@ -8,3 +8,7 @@ type User struct {
 	Nickname   string `json:"nickname"`
 	CareerName string `json:"career_name"`
 }
+
+func NewUser() *User {
+	return &User{}
+}

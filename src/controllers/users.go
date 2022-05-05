@@ -34,12 +34,12 @@ func bdConsultAllUsers(db *sql.DB, c *gin.Context) (users []*models.User) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var user *models.User
+		var user models.User
 		err = rows.Scan(&user.UserID, &user.Email, &user.Name, &user.Surname, &user.CareerName, &user.Nickname)
 		if err != nil {
 			panic(err)
 		} else {
-			users = append(users, user)
+			users = append(users, &user)
 		}
 	}
 
