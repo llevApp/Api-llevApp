@@ -14,3 +14,13 @@ type NewTripsRecords struct {
 	Longitude float64 `json:"longitude"`
 	Time      string  `json:"start_time"`
 }
+
+type TripRequest struct {
+	UserName     string  `json:"user_name,omitempty"`
+	UserCareer   string  `json:"user_career,omitempty"`
+	UserID       int     `json:"user_id,omitempty"`
+	TripID       int     `json:"trip_id,omitempty"`
+	Latitude     float64 `json:"latitude,omitempty"`
+	Longitude    float64 `json:"longitude,omitempty"`
+	Contribution int     `json:"contribution,omitempty"`
+}

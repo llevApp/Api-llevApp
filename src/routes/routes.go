@@ -9,18 +9,24 @@ import (
 
 func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
 
-	api := Engine.Group("/trips")
+	api := Engine.Group("/api-llevapp")
 	{
 		driver := api.Group("/driver")
 		{
 			driver.GET("/:id", func(c *gin.Context) {
 				//controllers.GetTrips(c)
 			})
+			driver.GET("/trips-request", func(c *gin.Context) {
+				controllers.GetRequestDriver(c, db)
+			})
 			driver.POST("/new-trip", func(c *gin.Context) {
 				controllers.InsertNewTrip(c, db)
 			})
 			driver.PUT("/end-trip/:id", func(c *gin.Context) {
 				controllers.EndTrip(c, db)
+			})
+			driver.PUT("/trip-request/:response", func(c *gin.Context) {
+				controllers.TripRequestDriver(c, db)
 			})
 
 		}
@@ -29,6 +35,14 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
 			//get all active trips
 			passengers.GET("/trips", func(c *gin.Context) {
 				controllers.ActiveTrips(c, db)
+			})
+
+			passengers.POST("/trip-request", func(c *gin.Context) {
+				controllers.TripRequest(c, db)
+			})
+
+			passengers.GET("/request-state", func(c *gin.Context) {
+				controllers.RequestState(c, db)
 			})
 		}
 
