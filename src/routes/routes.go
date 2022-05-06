@@ -2,24 +2,37 @@ package routes
 
 import (
 	"database/sql"
-	"llevapp/src/controllers"
+	controllers "llevapp/src/controllers/trips"
 
 	"github.com/gin-gonic/gin"
 )
 
 func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
 
-	api := Engine.Group("/v1")
+	api := Engine.Group("/trips")
 	{
-		trips := api.Group("/trips")
+		driver := api.Group("/driver")
 		{
-			trips.GET("/indicators/:id", func(c *gin.Context) {
-				controllers.GetTrips(c)
+			driver.GET("/:id", func(c *gin.Context) {
+				//controllers.GetTrips(c)
+			})
+			driver.POST("/new-trip", func(c *gin.Context) {
+				controllers.InsertNewTrip(c, db)
+			})
+			driver.PUT("/end-trip/:id", func(c *gin.Context) {
+				controllers.EndTrip(c, db)
 			})
 
 		}
+		passengers := api.Group("/passengers")
+		{
+			//get all active trips
+			passengers.GET("/trips", func(c *gin.Context) {
+				controllers.ActiveTrips(c, db)
+			})
+		}
 
-		user := api.Group("/user")
+		/* user := api.Group("/user")
 		{
 			user.POST("/info", func(c *gin.Context) {
 				controllers.NewUser(c)
@@ -33,7 +46,7 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
 				controllers.GetUsersDetail(db, c)
 			})
 
-		}
+		} */
 	}
 	return nil
 }

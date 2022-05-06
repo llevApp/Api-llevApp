@@ -11,10 +11,9 @@ func GetTrips(c *gin.Context) {
 		user models.User
 	)
 
-	id := c.Param("id")
-	if id == "1" {
-		user.Name = "Diosito"
-	}
+	/* id := c.Query("id")
+	isDriver := c.Query("is-driver")
+	*/
 	if user.Name != "" {
 		c.JSON(200, user)
 
