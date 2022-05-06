@@ -1,12 +1,5 @@
 package controllers
 
-import (
-	"database/sql"
-	"llevapp/src/models"
-
-	"github.com/gin-gonic/gin"
-)
-
 /*
 
 SELECT id, email, first_name, surname, career_id, nick_name
@@ -15,7 +8,7 @@ FROM llevapp.users;
 
 */
 
-func GetUsersDetail(b *sql.DB, c *gin.Context) {
+/* func GetUsersDetail(b *sql.DB, c *gin.Context) {
 
 	users := bdConsultAllUsers(b, c)
 
@@ -51,3 +44,4 @@ func bdConsultAllUsers(db *sql.DB, c *gin.Context) (users []*models.User) {
 	return
 
 }
+*/
