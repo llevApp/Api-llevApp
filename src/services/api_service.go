@@ -63,7 +63,7 @@ func (service *APIService) Init() error {
 func (service *APIService) Execute(waitGroup *sync.WaitGroup) error {
 	service.logger.Info("[APIService] Executing...")
 
-	err := routes.EndpointGroup(service.Engine)
+	err := routes.EndpointGroup(service.Engine, service.PostgreSQLService.db)
 	err = service.Engine.Run(":" + service.port)
 	if err != nil {
 		service.logger.Fatal("[APIService] Failed running api server: " + err.Error())

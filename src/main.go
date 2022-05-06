@@ -21,7 +21,7 @@ func main() {
 		services.NewPostgreSQLService(
 			os.Getenv("SQL_CONNECTION_STRING"),
 		),
-		/* services.NewAPIService(os.Getenv("PORT")), */
+		services.NewAPIService(os.Getenv("PORT")),
 	}
 	for _, service := range allServices {
 		service.InjectServices(logger, allServices)

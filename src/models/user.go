@@ -1,6 +1,13 @@
 package models
 
 type User struct {
-	Name string `json:"name"`
-	Mail string `json:"mail"`
+	UserID     int    `json:"user_id"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	Nickname   string `json:"nickname"`
+	CareerName string `json:"career_name"`
+}
+
+func NewUser() *User {
+	return &User{}
 }
