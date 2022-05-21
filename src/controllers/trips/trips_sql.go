@@ -3,6 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"llevapp/src/models"
+	"strconv"
 )
 
 func newTripByDriver(db *sql.DB, trip models.NewTripsRecords) (err error) {
@@ -49,6 +50,79 @@ func GetActiveTrips(db *sql.DB) (ActiveTrips []models.TripsRecords, err error) {
 		ActiveTrips = append(ActiveTrips, Trips)
 	}
 
+	return
+}
+
+func GetActiveTripsDriver(db *sql.DB, id string) (ActiveTrips []models.TripsRecords, err error) {
+
+	rows, err := db.Query(`SELECT distinct (t.id),u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc `+
+		`FROM llevapp.trips as t `+
+		`INNER JOIN llevapp.users as u on u.id = t.driver_user_id `+
+		`INNER JOIN llevapp.career as c on c.id = u.career_id `+
+		`INNER JOIN llevapp.trips_passenger as tp on tp.trip_id = t.id `+
+		`WHERE t.is_active = true  AND u.id = $1 `, id)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var Trips models.TripsRecords
+		err = rows.Scan(&Trips.Id, &Trips.Driver, &Trips.DriverCareer, &Trips.Longitude, &Trips.Latitude, &Trips.InitTripTime)
+		if err != nil {
+			panic(err)
+		}
+		ActiveTrips = append(ActiveTrips, Trips)
+	}
+
+	return
+}
+
+func GetTotalTips(db *sql.DB, id string) (total float64, err error) {
+	var tips []float64
+	var totalMounth float64
+	rows, err := db.Query(`SELECT SUM(contribution) as sum_score `+
+		`FROM llevapp.trips_passenger tp `+
+		`where tp.trip_id  = $1`, id)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var Tip models.Tip
+		err = rows.Scan(&Tip.Total)
+		if err != nil {
+			panic(err)
+		}
+		if totalFloat, err := strconv.ParseFloat(Tip.Total, 32); err == nil {
+			tips = append(tips, totalFloat)
+		}
+
+	}
+	for _, tip := range tips {
+		totalMounth = totalMounth + tip
+	}
+	total = totalMounth
+	return
+}
+
+func GetTotalPassenger(db *sql.DB, id string) (total int, err error) {
+	var totalPassenger int
+	rows, err := db.Query(`SELECT Count(*) `+
+		`FROM llevapp.trips_passenger tp `+
+		`where tp.trip_id  = $1`, id)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+
+		err = rows.Scan(&totalPassenger)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	total = totalPassenger
 	return
 }
 
