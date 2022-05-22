@@ -46,7 +46,6 @@ func (service *PostgreSQLService) Init() error {
 		service.logger.Fatal("[PostgreSQLService] Failed connecting to database: " + err.Error())
 		return err
 	}
-	defer service.db.Close()
 	service.logger.Info("[PostgreSQLService] Connected to database successfully")
 	return nil
 }

@@ -27,6 +27,10 @@ func (e Error) Error() string {
 	return "mssql: " + e.Message
 }
 
+func (e Error) String() string {
+	return e.Message
+}
+
 // SQLErrorNumber returns the SQL Server error number.
 func (e Error) SQLErrorNumber() int32 {
 	return e.Number
@@ -57,23 +61,19 @@ func (e Error) SQLErrorLineNo() int32 {
 }
 
 type StreamError struct {
-	Message string
+	InnerError error
 }
 
 func (e StreamError) Error() string {
-	return e.Message
-}
-
-func streamErrorf(format string, v ...interface{}) StreamError {
-	return StreamError{"Invalid TDS stream: " + fmt.Sprintf(format, v...)}
+	return "Invalid TDS stream: " + e.InnerError.Error()
 }
 
 func badStreamPanic(err error) {
-	panic(streamErrorf("%v", err))
+	panic(StreamError{InnerError: err})
 }
 
 func badStreamPanicf(format string, v ...interface{}) {
-	panic(streamErrorf(format, v...))
+	panic(fmt.Errorf(format, v...))
 }
 
 // ServerError is returned when the server got a fatal error
