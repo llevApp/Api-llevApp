@@ -32,6 +32,9 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
 			driver.PUT("/trip-request/:response", func(c *gin.Context) {
 				controllers_trips.TripRequestDriver(c, db)
 			})
+			driver.GET("/trips/:id", func(c *gin.Context) {
+				controllers_trips.ActiveTripsDriver(c, db)
+			})
 
 		}
 		passengers := api.Group("/passengers")
