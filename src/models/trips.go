@@ -9,6 +9,7 @@ type TripsRecords struct {
 	InitTripTime   string  `json:"init_trip_time"`
 	TotalTip       float64 `json:"total_tips"`
 	TotalPassenger int     `json:"total_passenger"`
+	Address        string  `json:"address"`
 }
 
 type Tip struct {
@@ -21,6 +22,7 @@ type NewTripsRecords struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 	Time      string  `json:"start_time"`
+	Address   string  `json:"address"`
 }
 
 type TripRequest struct {
