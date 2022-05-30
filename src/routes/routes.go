@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	controllers_trips "llevapp/src/controllers/trips"
 	controllers_user "llevapp/src/controllers/user"
+	"llevapp/src/websocket"
 
 	"github.com/gin-gonic/gin"
 )
 
-func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
+func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub *websocket.Hub) error {
 
 	api := Engine.Group("/api-llevapp")
 	{
@@ -68,6 +69,13 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB) error {
 			})
 
 		} */
+	}
+
+	ws := Engine.Group("/websocket")
+	{
+		ws.GET("/request", func(c *gin.Context) {
+			websocket.ServeWs(hub, c.Writer, c.Request, db)
+		})
 	}
 	return nil
 }

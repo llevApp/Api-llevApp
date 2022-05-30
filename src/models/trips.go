@@ -34,3 +34,17 @@ type TripRequest struct {
 	Longitude    float64 `json:"longitude,omitempty"`
 	Contribution int     `json:"contribution,omitempty"`
 }
+
+type TripRequestDriver struct {
+	Response        string `json:"response,omitempty"`
+	Trip_id         string `json:"trip,omitempty"`
+	PassangerUserID string `json:"user,omitempty"`
+}
+
+type TripRequestPassenger struct {
+	Request TripRequest `json:"request,omitempty"`
+}
+
+type TripResponseDriver struct {
+	Response TripRequestDriver `json:"response,omitempty"`
+}

@@ -126,7 +126,7 @@ func GetTotalPassenger(db *sql.DB, id string) (total int, err error) {
 	return
 }
 
-func newTripRequest(db *sql.DB, trip models.TripRequest) (err error) {
+func NewTripRequest(db *sql.DB, trip models.TripRequest) (err error) {
 	insertDynStmt := `INSERT INTO llevapp.trips_passenger ` +
 		`(trip_id, passenger_user_id, longitude, latitude, contribution,is_valid,has_confirmation)` +
 		`VALUES($1, $2, $3, $4,$5,TRUE,FALSE)`

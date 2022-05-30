@@ -83,7 +83,7 @@ func TripRequest(c *gin.Context, db *sql.DB) {
 	)
 
 	if err := c.ShouldBindJSON(&trip); err == nil {
-		error_insert := newTripRequest(db, trip)
+		error_insert := NewTripRequest(db, trip)
 		if error_insert == nil {
 			c.JSON(200, "Trips save succesfully")
 		} else {

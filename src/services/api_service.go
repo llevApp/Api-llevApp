@@ -3,6 +3,8 @@ package services
 import (
 	"llevapp/src/middlewares"
 	"llevapp/src/routes"
+
+	"llevapp/src/websocket"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +16,7 @@ type APIService struct {
 	port              string
 	logger            *logrus.Entry
 	Engine            *gin.Engine
+	hub               *websocket.Hub
 	PostgreSQLService *PostgreSQLService
 }
 
@@ -52,7 +55,7 @@ func (service *APIService) InjectServices(logger *logrus.Entry, services []Servi
 func (service *APIService) Init() error {
 	service.logger.Info("[APIService] Initializing...")
 	service.logger.Info("[APIService] Using port: " + service.port)
-
+	service.hub = websocket.NewHub()
 	service.Engine = gin.Default()
 	service.Engine.Use(middlewares.CORSMiddleware())
 	service.Engine.Use(gin.Recovery())
@@ -62,8 +65,8 @@ func (service *APIService) Init() error {
 //Execute Execute this service
 func (service *APIService) Execute(waitGroup *sync.WaitGroup) error {
 	service.logger.Info("[APIService] Executing...")
-
-	err := routes.EndpointGroup(service.Engine, service.PostgreSQLService.db)
+	go service.hub.Run()
+	err := routes.EndpointGroup(service.Engine, service.PostgreSQLService.db, service.hub)
 	err = service.Engine.Run(":" + service.port)
 	if err != nil {
 		service.logger.Fatal("[APIService] Failed running api server: " + err.Error())
