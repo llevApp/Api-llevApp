@@ -85,8 +85,11 @@ func (c *Client) readPump(db *sql.DB) {
 			controllers.NewTripRequest(db, trip.Request)
 		}
 
-		json.Unmarshal(message, &tripResponse)
-		if tripResponse.Response.Trip_id != "0" {
+		err = json.Unmarshal(message, &tripResponse)
+		if err != nil {
+
+		}
+		if tripResponse.Response.Trip_id != "" {
 
 			TripId, err := strconv.Atoi(tripResponse.Response.Trip_id)
 			PassangerUserID, err := strconv.Atoi(tripResponse.Response.PassangerUserID)
@@ -123,7 +126,6 @@ func (c *Client) writePump(db *sql.DB) {
 		case message, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
-				// The hub closed the channel.
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
