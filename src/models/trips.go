@@ -43,6 +43,7 @@ type TripRequestDriver struct {
 
 type TripRequestPassenger struct {
 	Request TripRequest `json:"request,omitempty"`
+	IfSend  bool
 }
 
 type TripResponseDriver struct {
