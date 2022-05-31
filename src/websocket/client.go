@@ -58,10 +58,12 @@ type Client struct {
 // The application runs readPump in a per-connection goroutine. The application
 // ensures that there is at most one reader on a connection by executing all
 // reads from this goroutine.
-func (c *Client) readPump() {
+func (c *Client) readPump(db *sql.DB) {
 	var (
-		trip models.TripRequest
+		trip         models.TripRequestPassenger
+		tripResponse models.TripResponseDriver
 	)
+
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
@@ -79,7 +81,27 @@ func (c *Client) readPump() {
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 		json.Unmarshal(message, &trip)
+		if trip.Request.UserID != 0 {
+			controllers.NewTripRequest(db, trip.Request)
+		}
 
+		json.Unmarshal(message, &tripResponse)
+		if tripResponse.Response.Trip_id != "0" {
+
+			TripId, err := strconv.Atoi(tripResponse.Response.Trip_id)
+			PassangerUserID, err := strconv.Atoi(tripResponse.Response.PassangerUserID)
+
+			if tripResponse.Response.Response == "accepted" {
+				if err == nil {
+					controllers.AceptTripsRequest(db, TripId, PassangerUserID)
+				}
+			} else {
+				if err == nil {
+					controllers.DeclineTripsRequest(db, TripId, PassangerUserID)
+
+				}
+			}
+		}
 		c.hub.broadcast <- message
 	}
 }
@@ -90,10 +112,6 @@ func (c *Client) readPump() {
 // application ensures that there is at most one writer to a connection by
 // executing all writes from this goroutine.
 func (c *Client) writePump(db *sql.DB) {
-	var (
-		trip         models.TripRequestPassenger
-		tripResponse models.TripResponseDriver
-	)
 
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
@@ -101,7 +119,6 @@ func (c *Client) writePump(db *sql.DB) {
 		c.conn.Close()
 	}()
 	for {
-		IfSend := false
 		select {
 		case message, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -116,56 +133,7 @@ func (c *Client) writePump(db *sql.DB) {
 				return
 			}
 
-			json.Unmarshal(message, &trip)
-
-			if trip.Request.UserID != 0 {
-				var error_insert error
-
-				error_insert = controllers.NewTripRequest(db, trip.Request)
-				okMssg := "request send"
-				w.Write([]byte(okMssg))
-
-				if error_insert == nil {
-					w.Write(message)
-					trip = models.TripRequestPassenger{}
-				} else {
-					w.Write([]byte(error_insert.Error()))
-				}
-			}
-
-			json.Unmarshal(message, &tripResponse)
-			if tripResponse.Response.Trip_id != "0" {
-
-				TripId, err := strconv.Atoi(tripResponse.Response.Trip_id)
-				PassangerUserID, err := strconv.Atoi(tripResponse.Response.PassangerUserID)
-
-				if tripResponse.Response.Response == "accepted" {
-					if err == nil {
-						_, err := controllers.AceptTripsRequest(db, TripId, PassangerUserID)
-						if err == nil {
-							okMssg := "Response send"
-							w.Write([]byte(okMssg))
-							w.Write(message)
-							tripResponse = models.TripResponseDriver{}
-						} else {
-							w.Write([]byte(err.Error()))
-							tripResponse = models.TripResponseDriver{}
-						}
-
-					}
-				} else {
-					if err == nil {
-						_, err := controllers.DeclineTripsRequest(db, TripId, PassangerUserID)
-						if err == nil {
-							okMssg := "Response send"
-							w.Write([]byte(okMssg))
-						} else {
-							w.Write([]byte(err.Error()))
-						}
-					}
-				}
-			}
-
+			w.Write(message)
 			// Add queued chat messages to the current websocket message.
 			n := len(c.send)
 			for i := 0; i < n; i++ {
@@ -198,5 +166,5 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.writePump(db)
-	go client.readPump()
+	go client.readPump(db)
 }
