@@ -92,7 +92,7 @@ func (c *Client) readPump() {
 func (c *Client) writePump(db *sql.DB) {
 	var (
 		trip         models.TripRequestPassenger
-		tripResponse *models.TripResponseDriver
+		tripResponse models.TripResponseDriver
 	)
 
 	ticker := time.NewTicker(pingPeriod)
@@ -101,6 +101,7 @@ func (c *Client) writePump(db *sql.DB) {
 		c.conn.Close()
 	}()
 	for {
+		IfSend := false
 		select {
 		case message, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -116,36 +117,54 @@ func (c *Client) writePump(db *sql.DB) {
 			}
 
 			json.Unmarshal(message, &trip)
+
 			if trip.Request.UserID != 0 {
-				error_insert := controllers.NewTripRequest(db, trip.Request)
+				var error_insert error
+
+				error_insert = controllers.NewTripRequest(db, trip.Request)
+				okMssg := "request send"
+				w.Write([]byte(okMssg))
+
 				if error_insert == nil {
-					return
+					w.Write(message)
+					trip = models.TripRequestPassenger{}
+				} else {
+					w.Write([]byte(error_insert.Error()))
 				}
 			}
 
-			errorTripResponse := json.Unmarshal(message, &tripResponse)
-			if errorTripResponse == nil {
+			json.Unmarshal(message, &tripResponse)
+			if tripResponse.Response.Trip_id != "0" {
+
 				TripId, err := strconv.Atoi(tripResponse.Response.Trip_id)
 				PassangerUserID, err := strconv.Atoi(tripResponse.Response.PassangerUserID)
+
 				if tripResponse.Response.Response == "accepted" {
 					if err == nil {
 						_, err := controllers.AceptTripsRequest(db, TripId, PassangerUserID)
-						if err != nil {
-							return
+						if err == nil {
+							okMssg := "Response send"
+							w.Write([]byte(okMssg))
+							w.Write(message)
+							tripResponse = models.TripResponseDriver{}
+						} else {
+							w.Write([]byte(err.Error()))
+							tripResponse = models.TripResponseDriver{}
 						}
 
 					}
 				} else {
 					if err == nil {
 						_, err := controllers.DeclineTripsRequest(db, TripId, PassangerUserID)
-						if err != nil {
-							return
+						if err == nil {
+							okMssg := "Response send"
+							w.Write([]byte(okMssg))
+						} else {
+							w.Write([]byte(err.Error()))
 						}
 					}
 				}
 			}
-
-			w.Write(message)
 
 			// Add queued chat messages to the current websocket message.
 			n := len(c.send)
