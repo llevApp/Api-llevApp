@@ -32,7 +32,7 @@ func UpdateTripStatus(db *sql.DB, id int) (err error) {
 
 func GetActiveTrips(db *sql.DB) (ActiveTrips []models.TripsRecords, err error) {
 
-	rows, err := db.Query(`SELECT u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc ,t.address` +
+	rows, err := db.Query(`SELECT u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc ,t.address ` +
 		`FROM llevapp.trips as t ` +
 		`INNER JOIN llevapp.users as u on u.id = t.driver_user_id ` +
 		`INNER JOIN llevapp.career as c on c.id = u.career_id ` +
