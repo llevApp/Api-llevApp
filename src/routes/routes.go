@@ -4,12 +4,14 @@ import (
 	"database/sql"
 	controllers_trips "llevapp/src/controllers/trips"
 	controllers_user "llevapp/src/controllers/user"
-	"llevapp/src/websocket"
+	ws_chat "llevapp/src/websocket/chat"
+	ws_location "llevapp/src/websocket/location"
+	ws_request "llevapp/src/websocket/trip_request"
 
 	"github.com/gin-gonic/gin"
 )
 
-func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub *websocket.Hub) error {
+func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub_request *ws_request.Hub, hub_chat *ws_chat.Hub, hub_location *ws_location.Hub) error {
 
 	api := Engine.Group("/api-llevapp")
 	{
@@ -45,13 +47,13 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub *websocket.Hub) error {
 				controllers_trips.ActiveTrips(c, db)
 			})
 
-			passengers.POST("/trip-request", func(c *gin.Context) {
+			/* passengers.POST("/trip-request", func(c *gin.Context) {
 				controllers_trips.TripRequest(c, db)
 			})
 
 			passengers.GET("/request-state", func(c *gin.Context) {
 				controllers_trips.RequestState(c, db)
-			})
+			}) */
 		}
 
 		/* user := api.Group("/user")
@@ -71,10 +73,22 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub *websocket.Hub) error {
 		} */
 	}
 
-	ws := Engine.Group("/websocket")
+	ws := Engine.Group("/ws")
 	{
-		ws.GET("/request", func(c *gin.Context) {
-			websocket.ServeWs(hub, c.Writer, c.Request, db)
+		ws.GET("/trip-request/:driverId", func(c *gin.Context) {
+			UserRoom := c.Param("driverId")
+			ws_request.ServeWs(c.Writer, c.Request, UserRoom, db, hub_request)
+		})
+		ws.GET("/chat/:driverId/:passengerId", func(c *gin.Context) {
+			DriverId := c.Param("driverId")
+			PassengerId := c.Param("passengerId")
+
+			UserRoom := DriverId + "_" + PassengerId
+			ws_chat.ServeWs(c.Writer, c.Request, UserRoom, hub_chat)
+		})
+		ws.GET("/location/:driverId", func(c *gin.Context) {
+			UserRoom := c.Param("driverId")
+			ws_location.ServeWs(c.Writer, c.Request, UserRoom, db, hub_location)
 		})
 	}
 	return nil

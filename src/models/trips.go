@@ -36,9 +36,9 @@ type TripRequest struct {
 }
 
 type TripRequestDriver struct {
-	Response        string `json:"response,omitempty"`
-	Trip_id         string `json:"trip,omitempty"`
-	PassangerUserID string `json:"user,omitempty"`
+	Response        string `json:"status,omitempty"`
+	Trip_id         int    `json:"trip_id,omitempty"`
+	PassangerUserID int    `json:"user_id,omitempty"`
 }
 
 type TripRequestPassenger struct {
