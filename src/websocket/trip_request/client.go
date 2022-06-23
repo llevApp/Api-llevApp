@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	controllers "llevapp/src/controllers/trips"
+	controllers_user "llevapp/src/controllers/user"
 	"llevapp/src/models"
 	"log"
 	"net/http"
@@ -95,7 +96,12 @@ func (s Subscription) readPump(db *sql.DB, hub *Hub) {
 			}
 
 		default:
+			userInfo, _ := controllers_user.GetUserInfoById(db, trip.Request.UserID)
 			err = controllers.NewTripRequest(db, trip.Request)
+			if err == nil {
+				trip.Request.UserName = userInfo.Name
+				msg, _ = json.Marshal(trip)
+			}
 		}
 		if err != nil {
 			errorType := (strings.Split(err.Error(), ":"))[0]
@@ -119,6 +125,7 @@ func (s Subscription) readPump(db *sql.DB, hub *Hub) {
 			}
 			break */
 		} else {
+
 			m := Message{msg, s.room}
 			hub.broadcast <- m
 		}

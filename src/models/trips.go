@@ -32,6 +32,7 @@ type TripRequest struct {
 	TripID       int     `json:"trip_id,omitempty"`
 	Latitude     float64 `json:"latitude,omitempty"`
 	Longitude    float64 `json:"longitude,omitempty"`
+	Location     string  `json:"location,omitempty"`
 	Contribution int     `json:"contribution,omitempty"`
 }
 
