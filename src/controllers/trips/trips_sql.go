@@ -128,10 +128,10 @@ func GetTotalPassenger(db *sql.DB, id string) (total int, err error) {
 
 func NewTripRequest(db *sql.DB, trip models.TripRequest) (err error) {
 	insertDynStmt := `INSERT INTO llevapp.trips_passenger ` +
-		`(trip_id, passenger_user_id, longitude, latitude, contribution,is_valid,has_confirmation)` +
-		`VALUES($1, $2, $3, $4,$5,TRUE,FALSE)`
+		`(trip_id, passenger_user_id, longitude, latitude, contribution,is_valid,has_confirmation,location)` +
+		`VALUES($1, $2, $3, $4,$5,TRUE,FALSE,$6)`
 
-	_, err = db.Exec(insertDynStmt, trip.TripID, trip.UserID, trip.Longitude, trip.Latitude, trip.Contribution)
+	_, err = db.Exec(insertDynStmt, trip.TripID, trip.UserID, trip.Longitude, trip.Latitude, trip.Contribution, trip.Location)
 	if err != nil {
 		return
 	}
