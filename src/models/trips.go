@@ -10,6 +10,7 @@ type TripsRecords struct {
 	TotalTip       float64 `json:"total_tips"`
 	TotalPassenger int     `json:"total_passenger"`
 	Address        string  `json:"address"`
+	DriverID       int     `json:"driver_id"`
 }
 
 type Tip struct {

@@ -32,7 +32,7 @@ func UpdateTripStatus(db *sql.DB, id int) (err error) {
 
 func GetActiveTrips(db *sql.DB) (ActiveTrips []models.TripsRecords, err error) {
 
-	rows, err := db.Query(`SELECT t.id,u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc ,t.address ` +
+	rows, err := db.Query(`SELECT t.id,u.id,u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc ,t.address ` +
 		`FROM llevapp.trips as t ` +
 		`INNER JOIN llevapp.users as u on u.id = t.driver_user_id ` +
 		`INNER JOIN llevapp.career as c on c.id = u.career_id ` +
@@ -43,7 +43,7 @@ func GetActiveTrips(db *sql.DB) (ActiveTrips []models.TripsRecords, err error) {
 	defer rows.Close()
 	for rows.Next() {
 		var Trips models.TripsRecords
-		err = rows.Scan(&Trips.Id, &Trips.Driver, &Trips.DriverCareer, &Trips.Longitude, &Trips.Latitude, &Trips.InitTripTime, &Trips.Address)
+		err = rows.Scan(&Trips.Id, &Trips.DriverID, &Trips.Driver, &Trips.DriverCareer, &Trips.Longitude, &Trips.Latitude, &Trips.InitTripTime, &Trips.Address)
 		if err != nil {
 			panic(err)
 		}
@@ -55,7 +55,7 @@ func GetActiveTrips(db *sql.DB) (ActiveTrips []models.TripsRecords, err error) {
 
 func GetActiveTripsDriver(db *sql.DB, id string) (ActiveTrips []models.TripsRecords, err error) {
 
-	rows, err := db.Query(`SELECT distinct (t.id),u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc,COALESCE(t.address,'Sin datos')`+
+	rows, err := db.Query(`SELECT distinct (t.id),t.driver_user_id,u.name,c.name,t.init_longitude, t.init_latitude, t.init_time_utc,COALESCE(t.address,'Sin datos')`+
 		`FROM llevapp.trips as t `+
 		`INNER JOIN llevapp.users as u on u.id = t.driver_user_id `+
 		`INNER JOIN llevapp.career as c on c.id = u.career_id `+
@@ -67,7 +67,7 @@ func GetActiveTripsDriver(db *sql.DB, id string) (ActiveTrips []models.TripsReco
 	defer rows.Close()
 	for rows.Next() {
 		var Trips models.TripsRecords
-		err = rows.Scan(&Trips.Id, &Trips.Driver, &Trips.DriverCareer, &Trips.Longitude, &Trips.Latitude, &Trips.InitTripTime, &Trips.Address)
+		err = rows.Scan(&Trips.Id, &Trips.DriverID, &Trips.Driver, &Trips.DriverCareer, &Trips.Longitude, &Trips.Latitude, &Trips.InitTripTime, &Trips.Address)
 		if err != nil {
 			panic(err)
 		}
