@@ -40,7 +40,7 @@ func (service *APIService) Health() bool {
 func (service *APIService) InjectServices(logger *logrus.Entry, services []Service) {
 
 	service.logger = logger
-
+	/* _ numero de iteracion, structure dentro del arreglo */
 	for _, otherService := range services {
 		if PostgreSQLService, ok := otherService.(*PostgreSQLService); ok {
 

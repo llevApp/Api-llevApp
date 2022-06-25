@@ -30,11 +30,15 @@ func (service *PostgreSQLService) Health() bool {
 }
 
 //InjectServices InjectServices
+/* Funcion que pertenece al postswlservice, es una funcion de esta estructura PostgreSQLService*/
 func (service *PostgreSQLService) InjectServices(logger *logrus.Entry, otherServices []Service) {
 	service.logger = logger
 }
 
 //Init Init this service
+/* cuando llamas al init, sabemos a que bd se esta conectando esta wea, creamos un posible error
+
+ */
 func (service *PostgreSQLService) Init() error {
 	service.logger.Info("[PostgreSQLService] Initializing...")
 	service.logger.Info("[PostgreSQLService] Using connection string: " + service.connectionString)

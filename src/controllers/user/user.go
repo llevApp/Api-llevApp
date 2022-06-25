@@ -18,3 +18,12 @@ func UserInfo(c *gin.Context, db *sql.DB) {
 	}
 
 }
+func UserTripInfo(c *gin.Context, db *sql.DB) {
+	Id := c.Param("id")
+	TripInfo, err := GetUserTripInfo(db, Id)
+	if err == nil {
+		c.JSON(200, TripInfo)
+	} else {
+		c.JSON(204, err.Error())
+	}
+}

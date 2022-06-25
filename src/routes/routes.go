@@ -20,6 +20,10 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub_request *ws_request.Hub, 
 			user.GET("/:email", func(c *gin.Context) {
 				controllers_user.UserInfo(c, db)
 			})
+			user.GET("/trip-info/:id", func(c *gin.Context) {
+				controllers_user.UserTripInfo(c, db)
+
+			})
 		}
 		driver := api.Group("/driver")
 		{
