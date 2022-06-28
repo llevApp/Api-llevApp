@@ -56,19 +56,6 @@ func ActiveTrips(c *gin.Context, db *sql.DB) {
 func ActiveTripsDriver(c *gin.Context, db *sql.DB) {
 	userId := c.Param("id")
 	trips, err := GetActiveTripsDriver(db, userId)
-	for i, trip := range trips {
-		totalTip, err := GetTotalTips(db, trip.Id)
-		if err != nil {
-			break
-		}
-		totalPassenger, err := GetTotalPassenger(db, trip.Id)
-		if err != nil {
-			break
-		}
-		trips[i].TotalPassenger = totalPassenger
-		trips[i].TotalTip = totalTip
-	}
-
 	if err == nil {
 		c.JSON(200, trips)
 	} else {
