@@ -6,6 +6,7 @@ type User struct {
 	Email      string `json:"email"`
 	Nickname   string `json:"nickname"`
 	CareerName string `json:"career_name"`
+	UUID       string `json:"uuid_fb"`
 }
 
 func NewUser() *User {

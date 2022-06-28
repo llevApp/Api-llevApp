@@ -11,6 +11,7 @@ type TripsRecords struct {
 	TotalPassenger int     `json:"total_passenger"`
 	Address        string  `json:"address"`
 	DriverID       int     `json:"driver_id"`
+	UUID           string  `json:"uuid_fb,omitempty"`
 }
 
 type Tip struct {
@@ -35,6 +36,7 @@ type TripRequest struct {
 	Longitude    float64 `json:"longitude,omitempty"`
 	Location     string  `json:"location,omitempty"`
 	Contribution int     `json:"contribution,omitempty"`
+	UUID         string  `json:"uuid_fb,omitempty"`
 }
 
 type TripRequestDriver struct {
