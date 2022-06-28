@@ -21,7 +21,7 @@ func newTripByDriver(db *sql.DB, trip models.NewTripsRecords) (err error) {
 func UpdateTripStatus(db *sql.DB, id int) (err error) {
 	insertDynStmt := `UPDATE llevapp.trips ` +
 		`SET is_active=false ` +
-		`WHERE driver_user_id = $1`
+		`WHERE id = $1`
 
 	_, err = db.Exec(insertDynStmt, id)
 	if err != nil {
