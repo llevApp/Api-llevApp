@@ -53,3 +53,7 @@ type TripRequestPassenger struct {
 type TripResponseDriver struct {
 	Response TripRequestDriver `json:"response,omitempty"`
 }
+type TripResponseTripsDriver struct {
+	Trips   []TripsRecords `json:"trip"`
+	HasData bool           `json:"has_data"`
+}

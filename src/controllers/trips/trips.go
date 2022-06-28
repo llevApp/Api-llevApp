@@ -56,6 +56,7 @@ func ActiveTrips(c *gin.Context, db *sql.DB) {
 func ActiveTripsDriver(c *gin.Context, db *sql.DB) {
 	userId := c.Param("id")
 	trips, err := GetActiveTripsDriver(db, userId)
+
 	if err == nil {
 		c.JSON(200, trips)
 	} else {
