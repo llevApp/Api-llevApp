@@ -24,6 +24,10 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub_request *ws_request.Hub, 
 				controllers_user.UserTripInfo(c, db)
 
 			})
+			user.POST("/new", func(c *gin.Context) {
+				controllers_user.CreateUser(c, db)
+
+			})
 		}
 		driver := api.Group("/driver")
 		{

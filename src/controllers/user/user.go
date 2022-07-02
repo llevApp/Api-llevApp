@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"database/sql"
+	"llevapp/src/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,5 +26,23 @@ func UserTripInfo(c *gin.Context, db *sql.DB) {
 		c.JSON(200, TripInfo)
 	} else {
 		c.JSON(204, err.Error())
+	}
+}
+
+func CreateUser(c *gin.Context, db *sql.DB) {
+	var (
+		user models.User
+	)
+
+	if err := c.ShouldBindJSON(&user); err == nil {
+		err := CreateNewUser(db, user)
+		if err == nil {
+			response := "user: " + user.Name + " created successfully"
+			c.JSON(200, response)
+		} else {
+			c.JSON(203, err.Error())
+		}
+	} else {
+		c.JSON(203, err.Error())
 	}
 }

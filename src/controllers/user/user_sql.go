@@ -63,3 +63,17 @@ func GetUserInfoById(db *sql.DB, UserID int) (User models.User, err error) {
 
 	return
 }
+
+func CreateNewUser(db *sql.DB, User models.User) (err error) {
+
+	insertDynStmt := `INSERT INTO llevapp.users` +
+		`(email, name, career_id, nick_name, uuid_fb)` +
+		`VALUES($1, $2, $3, $4,$5)`
+
+	_, err = db.Exec(insertDynStmt, User.Email, User.Name, User.CareerId, User.Nickname, User.UUID)
+	if err != nil {
+		return
+	}
+	return
+
+}

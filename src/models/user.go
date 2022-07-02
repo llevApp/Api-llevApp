@@ -6,6 +6,7 @@ type User struct {
 	Email      string `json:"email"`
 	Nickname   string `json:"nickname"`
 	CareerName string `json:"career_name"`
+	CareerId   int    `json:"career_id"`
 	UUID       string `json:"uuid_fb"`
 }
 
