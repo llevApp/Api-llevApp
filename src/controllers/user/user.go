@@ -46,3 +46,12 @@ func CreateUser(c *gin.Context, db *sql.DB) {
 		c.JSON(203, err.Error())
 	}
 }
+
+func Carrers(c *gin.Context, db *sql.DB) {
+	carrers, err := GetCarrer(db)
+	if err == nil {
+		c.JSON(200, carrers)
+	} else {
+		c.JSON(204, err.Error())
+	}
+}

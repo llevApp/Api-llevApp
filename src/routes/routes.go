@@ -28,6 +28,10 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub_request *ws_request.Hub, 
 				controllers_user.CreateUser(c, db)
 
 			})
+			user.GET("/university-career", func(c *gin.Context) {
+				controllers_user.Carrers(c, db)
+
+			})
 		}
 		driver := api.Group("/driver")
 		{

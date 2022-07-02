@@ -77,3 +77,25 @@ func CreateNewUser(db *sql.DB, User models.User) (err error) {
 	return
 
 }
+
+func GetCarrer(db *sql.DB) (carrers []models.Carrer, err error) {
+	rows, err := db.Query(`SELECT id, name ` +
+		`FROM llevapp.career as tp `)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var carrer models.Carrer
+		err = rows.Scan(&carrer.Id, &carrer.Name)
+		if err != nil {
+			panic(err)
+		}
+		carrers = append(carrers, carrer)
+	}
+	return
+}
+
+/* SELECT id, name
+FROM llevapp.career;
+*/

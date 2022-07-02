@@ -10,6 +10,11 @@ type User struct {
 	UUID       string `json:"uuid_fb"`
 }
 
+type Carrer struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
 func NewUser() *User {
 	return &User{}
 }
