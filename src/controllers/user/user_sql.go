@@ -25,7 +25,7 @@ func GetUserInfo(db *sql.DB, UserEmail string) (User models.User, err error) {
 	return
 }
 func GetUserTripInfo(db *sql.DB, Id string) (Trip []models.TripRequest, err error) {
-	rows, err := db.Query(`SELECT u2.name,tp.location,tp.contribution,u2.uuid_fb `+
+	rows, err := db.Query(`SELECT u2.name,u2.id,tp.location,tp.contribution,u2.uuid_fb `+
 		`FROM llevapp.trips_passenger as tp `+
 		`INNER JOIN llevapp.users as u2 on u2.id = tp.passenger_user_id `+
 		`WHERE tp.trip_id = $1 `, Id)
