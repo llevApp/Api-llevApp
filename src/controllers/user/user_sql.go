@@ -35,7 +35,7 @@ func GetUserTripInfo(db *sql.DB, Id string) (Trip []models.TripRequest, err erro
 	defer rows.Close()
 	for rows.Next() {
 		var request models.TripRequest
-		err = rows.Scan(&request.UserName, &request.Location, &request.Contribution, &request.UUID)
+		err = rows.Scan(&request.UserName, &request.UserID, &request.Location, &request.Contribution, &request.UUID)
 		if err != nil {
 			panic(err)
 		}
