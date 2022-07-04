@@ -109,7 +109,7 @@ func GetActiveTripsDriver(db *sql.DB, id string) (ActiveTrips models.TripRespons
 func GetTotalTips(db *sql.DB, id string) (total float64, err error) {
 	var tips []float64
 	var totalMounth float64
-	rows, err := db.Query(`SELECT SUM(contribution) as sum_score `+
+	rows, err := db.Query(`SELECT COALESCE(SUM(contribution),0) as sum_score `+
 		`FROM llevapp.trips_passenger tp `+
 		`where tp.trip_id  = $1`, id)
 	if err != nil {
