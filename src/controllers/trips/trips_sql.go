@@ -53,6 +53,32 @@ func GetActiveTrips(db *sql.DB) (ActiveTrips []models.TripsRecords, err error) {
 	return
 }
 
+func GetTripsDriver(db *sql.DB, id string) (ActiveTrips models.TripResponseTripsDriver, err error) {
+
+	rows, err := db.Query(`SELECT distinct (t.id),t.driver_user_id,u.name,t.init_longitude, t.init_latitude, t.init_time_utc,COALESCE(t.address,'Sin datos')`+
+		`FROM llevapp.trips as t `+
+		`INNER JOIN llevapp.users as u on u.id = t.driver_user_id `+
+		`WHERE t.is_active = false  AND u.id = $1 `, id)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var Trips models.TripsRecords
+		err = rows.Scan(&Trips.Id, &Trips.DriverID, &Trips.Driver, &Trips.Longitude, &Trips.Latitude, &Trips.InitTripTime, &Trips.Address)
+		if err != nil {
+			panic(err)
+		}
+		ActiveTrips.Trips = append(ActiveTrips.Trips, Trips)
+	}
+	if len(ActiveTrips.Trips) > 0 {
+		ActiveTrips.HasData = true
+	} else {
+		ActiveTrips.HasData = false
+		ActiveTrips.Trips = []models.TripsRecords{}
+	}
+	return
+}
 func GetActiveTripsDriver(db *sql.DB, id string) (ActiveTrips models.TripResponseTripsDriver, err error) {
 
 	rows, err := db.Query(`SELECT distinct (t.id),t.driver_user_id,u.name,t.init_longitude, t.init_latitude, t.init_time_utc,COALESCE(t.address,'Sin datos')`+

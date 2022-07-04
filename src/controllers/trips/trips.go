@@ -53,7 +53,19 @@ func ActiveTrips(c *gin.Context, db *sql.DB) {
 	}
 }
 
-func ActiveTripsDriver(c *gin.Context, db *sql.DB) {
+func TripsDriver(c *gin.Context, db *sql.DB) {
+	userId := c.Param("id")
+	trips, err := GetTripsDriver(db, userId)
+
+	if err == nil {
+		c.JSON(200, trips)
+	} else {
+		c.JSON(204, err.Error())
+
+	}
+}
+
+func ActiveTripDriver(c *gin.Context, db *sql.DB) {
 	userId := c.Param("id")
 	trips, err := GetActiveTripsDriver(db, userId)
 

@@ -48,7 +48,10 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub_request *ws_request.Hub, 
 				controllers_trips.TripRequestDriver(c, db)
 			})
 			driver.GET("/trips/:id", func(c *gin.Context) {
-				controllers_trips.ActiveTripsDriver(c, db)
+				controllers_trips.TripsDriver(c, db)
+			})
+			driver.GET("/active-trip/:id", func(c *gin.Context) {
+				controllers_trips.ActiveTripDriver(c, db)
 			})
 
 		}
