@@ -95,7 +95,3 @@ func GetCarrer(db *sql.DB) (carrers []models.Carrer, err error) {
 	}
 	return
 }
-
-/* SELECT id, name
-FROM llevapp.career;
-*/

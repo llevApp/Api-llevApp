@@ -85,14 +85,9 @@ func (s Subscription) readPump(db *sql.DB, hub *Hub) {
 
 			}
 			if tripResponse.Response.Response == "accepted" {
-				if err == nil {
-					controllers.AceptTripsRequest(db, tripResponse.Response.Trip_id, tripResponse.Response.PassangerUserID)
-				}
+				controllers.AceptTripsRequest(db, tripResponse.Response.Trip_id, tripResponse.Response.PassangerUserID)
 			} else {
-				if err == nil {
-					controllers.DeclineTripsRequest(db, tripResponse.Response.Trip_id, tripResponse.Response.PassangerUserID)
-
-				}
+				controllers.DeclineTripsRequest(db, tripResponse.Response.Trip_id, tripResponse.Response.PassangerUserID)
 			}
 
 		default:
@@ -119,11 +114,6 @@ func (s Subscription) readPump(db *sql.DB, hub *Hub) {
 				m := Message{errorMsg, s.room}
 				hub.broadcast <- m
 			}
-
-			/* if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
-				log.Printf("error: %v", err)
-			}
-			break */
 		} else {
 
 			m := Message{msg, s.room}

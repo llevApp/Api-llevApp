@@ -57,35 +57,10 @@ func EndpointGroup(Engine *gin.Engine, db *sql.DB, hub_request *ws_request.Hub, 
 		}
 		passengers := api.Group("/passengers")
 		{
-			//get all active trips
 			passengers.GET("/trips", func(c *gin.Context) {
 				controllers_trips.ActiveTrips(c, db)
 			})
-
-			/* passengers.POST("/trip-request", func(c *gin.Context) {
-				controllers_trips.TripRequest(c, db)
-			})
-
-			passengers.GET("/request-state", func(c *gin.Context) {
-				controllers_trips.RequestState(c, db)
-			}) */
 		}
-
-		/* user := api.Group("/user")
-		{
-			user.POST("/info", func(c *gin.Context) {
-				controllers.NewUser(c)
-			})
-
-		}
-
-		users := api.Group("/users")
-		{
-			users.GET("/", func(c *gin.Context) {
-				controllers.GetUsersDetail(db, c)
-			})
-
-		} */
 	}
 
 	ws := Engine.Group("/ws")
