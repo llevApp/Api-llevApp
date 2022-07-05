@@ -111,7 +111,7 @@ func GetTotalTips(db *sql.DB, id string) (total float64, err error) {
 	var totalMounth float64
 	rows, err := db.Query(`SELECT COALESCE(SUM(contribution),0) as sum_score `+
 		`FROM llevapp.trips_passenger tp `+
-		`where tp.trip_id  = $1 AND tp.is_valid =true AND tp.has_confirmation = true`, id)
+		`where tp.trip_id  = $1  AND tp.has_confirmation = true`, id)
 	if err != nil {
 		return
 	}
@@ -138,7 +138,7 @@ func GetTotalPassenger(db *sql.DB, id string) (total int, err error) {
 	var totalPassenger int
 	rows, err := db.Query(`SELECT Count(*) `+
 		`FROM llevapp.trips_passenger tp `+
-		`where tp.trip_id  = $1 AND tp.is_valid =true AND tp.has_confirmation = true`, id)
+		`where tp.trip_id  = $1  AND tp.has_confirmation = true`, id)
 	if err != nil {
 		return
 	}
