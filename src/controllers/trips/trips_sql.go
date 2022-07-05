@@ -58,7 +58,7 @@ func GetTripsDriver(db *sql.DB, id string) (ActiveTrips models.TripResponseTrips
 	rows, err := db.Query(`SELECT distinct (t.id),t.driver_user_id,u.name,t.init_longitude, t.init_latitude, t.init_time_utc,COALESCE(t.address,'Sin datos')`+
 		`FROM llevapp.trips as t `+
 		`INNER JOIN llevapp.users as u on u.id = t.driver_user_id `+
-		`WHERE t.is_active = false  AND u.id = $1 `, id)
+		`WHERE t.is_active = false AND u.id = $1 `, id)
 	if err != nil {
 		return
 	}
@@ -111,7 +111,7 @@ func GetTotalTips(db *sql.DB, id string) (total float64, err error) {
 	var totalMounth float64
 	rows, err := db.Query(`SELECT COALESCE(SUM(contribution),0) as sum_score `+
 		`FROM llevapp.trips_passenger tp `+
-		`where tp.trip_id  = $1`, id)
+		`where tp.trip_id  = $1 AND tp.is_valid =true AND tp.has_confirmation = true`, id)
 	if err != nil {
 		return
 	}
@@ -138,7 +138,7 @@ func GetTotalPassenger(db *sql.DB, id string) (total int, err error) {
 	var totalPassenger int
 	rows, err := db.Query(`SELECT Count(*) `+
 		`FROM llevapp.trips_passenger tp `+
-		`where tp.trip_id  = $1`, id)
+		`where tp.trip_id  = $1 AND tp.is_valid =true AND tp.has_confirmation = true`, id)
 	if err != nil {
 		return
 	}
